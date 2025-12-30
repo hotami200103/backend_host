@@ -28,6 +28,9 @@ export class ShiftService {
 
     // Kiểm tra xem ca trực đã được phân công chưa
     const date = new Date(data.date);
+    if (isNaN(date.getTime())) {
+      throw new BadRequestException('Ngày không hợp lệ');
+    }
     date.setHours(0, 0, 0, 0);
 
     const existingShift = await this.db.shift.findUnique({
@@ -70,11 +73,17 @@ export class ShiftService {
       where.date = {};
       if (startDate) {
         const start = new Date(startDate);
+        if (isNaN(start.getTime())) {
+          throw new BadRequestException('Ngày bắt đầu không hợp lệ');
+        }
         start.setHours(0, 0, 0, 0);
         where.date.gte = start;
       }
       if (endDate) {
         const end = new Date(endDate);
+        if (isNaN(end.getTime())) {
+          throw new BadRequestException('Ngày kết thúc không hợp lệ');
+        }
         end.setHours(23, 59, 59, 999);
         where.date.lte = end;
       }
@@ -149,6 +158,9 @@ export class ShiftService {
       data.date !== undefined
         ? (() => {
             const d = new Date(data.date as string);
+            if (isNaN(d.getTime())) {
+              throw new BadRequestException('Ngày không hợp lệ');
+            }
             d.setHours(0, 0, 0, 0);
             return d;
           })()
