@@ -1,0 +1,8 @@
+{
+  "$schema": "https://schema.railpack.com",
+  "deploy": {
+    "buildCommand": "npm install && npm run build && npx prisma generate",
+    "startCommand": "node dist/src/main.js"
+  }
+}
+
